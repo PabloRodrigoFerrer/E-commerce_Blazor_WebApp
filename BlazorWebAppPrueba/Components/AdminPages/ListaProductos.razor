@@ -1,0 +1,98 @@
+﻿@page "/listaProductos"
+@inject NavigationManager NavManager
+@rendermode InteractiveServer
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components.QuickGrid
+<PageTitle>Productos</PageTitle>
+
+  <h2>Acá va la lista </h2>
+
+    <div class="d-flex col-md-6 col-8 align-items-center mt-3">
+    <input @bind=_txtFiltro @bind:event="oninput" @onkeydown="HandleKeyDown" type="search" role="search" class="form-control" placeholder="filtrar" />
+        <input type="checkbox" class="form-check-input ms-2"/>
+        <label class="text-nowrap ms-2">Filtro avanzado</label>
+    </div>
+    <div class="row g-3 mt-3 mb-4 align-items-end">
+
+        <div class="col-md-2 col-12">
+            <label>Campo: </label>
+            <select Class="form-select">
+                <option>Número</option>
+                <option>Nombre</option>
+                <option>Tipo</option>
+            </select>
+        </div>
+
+        <div class="col-md-2 col-12">
+            <label class="form-label ms-2">Criterio: </label>
+            <select class="form-select">
+            </select>
+        </div>
+
+        <div class="col-md-2 col-12">
+            <label class="ms-2">Filtro: </label>
+            <input class="form-control" />
+        </div>
+        <div class="col-md-2 col-12">
+            <select class="form-select">
+                <option>Todos</option>
+                <option>Activo</option>
+                <option>Inactivo</option>
+            </select>
+        </div>
+        <div class="col-md-2 col-12">
+            <button class="btn btn-primary">Buscar</button>
+        </div>
+    </div>
+    
+    <div class="row d-flex justify-content-end">
+        <select class="col-1 form-select-sm" @onchange="OnPaginationSizeChanged">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+        </select>
+    </div>
+    <QuickGrid class="table table-striped"
+               Items="@_listaPokemons.AsQueryable()"
+               ItemKey="@(p => p.Id)"
+               Pagination="_paginationState">
+               <PropertyColumn Title="Poke Id"
+                                Property="@(p => p.Id)"/>
+                <PropertyColumn Title="Nombre"
+                                Property="@(p => p.Nombre)"
+                                Sortable="true">
+                    <ColumnOptions>
+                        <div class="d-flex flex-row">
+                            <input class="form-control form-control-sm" />
+                            <button class="btn btn-primary btn-sm ms-1">Filter</button>
+                        </div>
+                    </ColumnOptions>        
+                </PropertyColumn>
+                <PropertyColumn Title="Descripcion"
+                                Property="@(p => p.Descripcion)"
+                                Sortable="true" />
+               <div class="text-center">
+                <PropertyColumn Title="Cantidad"
+                                Property="@(p => p.Cantidad)"
+                                Sortable="true"/>
+               </div>
+                <PropertyColumn Title="Precio"
+                                Property="@(p => p.Precio.ToString("C"))"
+                                Format=""/>
+                <TemplateColumn Title="Activo">
+                    <div class="text-center">
+                        <input type="checkbox" disabled checked="@context.Activo" />
+                    </div>
+                </TemplateColumn>
+                <TemplateColumn>
+                    <button @onclick="() => NavToAltaProducto(context.Id)" class="btn btn-outline-secondary btn-sm" href="/AltaProducto">Editar</button>
+                </TemplateColumn>
+    </QuickGrid>
+    <div class="card-footer">
+        <Paginator State="_paginationState"/>
+    </div>
+
+    <a href="/altaProducto" class="btn btn-primary">Agregar producto</a>
+    
+

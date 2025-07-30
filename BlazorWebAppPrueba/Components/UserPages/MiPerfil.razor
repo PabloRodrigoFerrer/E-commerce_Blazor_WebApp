@@ -1,0 +1,58 @@
+﻿@page "/perfil"
+<PageTitle>Mi perfil</PageTitle>
+
+    <h3>Mi perfil</h3>
+
+
+    <div class="row">
+        <div class="col-md-6 col-12 ">
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" readonly Class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Nombre</label>
+                <input type="text" Class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Apellido</label>
+                <input type="text" Class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Genero</label>
+                <select Class="form-select">
+                    <option>--Seleccionar--</option>
+                    <option>Masculino</option>
+                    <option>Femenino</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Fecha nacimiento</label>
+                <input type="date" class="form-control"/>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Direccion</label>
+                <input placeholder="Av.San Martin 2032, Cordoba, CP: 1514" class="form-control"/>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-12 mt-4 mt-md-0">
+            <div class="mb-3">
+                <input type="file" class="form-control" />
+            </div>
+            <div>
+                <img src="https://www.svgrepo.com/show/508699/landscape-placeholder.svg" class="img-fluid mx-auto d-block" />
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <button class="btn btn-primary" onclick="btnPerfilGuardar_Click">Guardar</button>
+        <a class="ms-2" href="/Default">Regresar</a>
+    </div>
+
+
+@code {
+
+}

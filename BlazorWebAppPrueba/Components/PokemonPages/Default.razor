@@ -1,0 +1,72 @@
+﻿@page "/"
+@page "/default"
+@rendermode InteractiveServer
+@inject CarritoService Cart
+@inject ProductService _productService
+@inject SearchService _searchService
+
+<PageTitle>Home</PageTitle>
+
+<h2 class="mb-5">Pokemon tengo que atraparlo ⚓</h2>
+
+<div class="d-flex flex-wrap gap-4 justify-content-center my-5">
+    <button class="btn btn-outline-secondary py-3 px-5" @onclick="() => CargarFiltro(3)">Agua</button>
+    <button class="btn btn-outline-secondary py-3 px-5" @onclick="() => CargarFiltro(2)">Fuego</button>
+    <button class="btn btn-outline-secondary py-3 px-5" @onclick="() => CargarFiltro(1)">Planta</button>
+    <button class="btn btn-outline-secondary py-3 px-5" @onclick="() => CargarFiltro()">Todos </button>
+</div>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    @if (ListaPokemons != null)
+    {
+        @foreach (var poke in ListaPokemons)
+        {
+            <div class="col">
+                <div class="card">
+                    <img src="@poke.UrlImagen" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">@poke.Nombre</h5>
+                        <h3 class="card-title">@poke.Precio.ToString("C")</h3>
+                        <p class="card-text">@poke.Descripcion</p>
+                        <a href="/detallePokemon/@poke.Id" class="btn btn-link">Ver detalle</a>
+                        @* <NavLink href="./detallePokemon/@poke.Id" class="btn btn-link" >Ver Detalle</NavLink> *@
+                        <button @onclick="() => Cart.AgregarCarrito(poke)" class="btn btn-primary">Agregar a Carrito 🛒</button>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+@if (ListaPokemons == null)
+{
+    <p>no hay lista</p>
+}
+
+     
+@code {
+    public IEnumerable<Pokemon> ListaPokemons { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaPokemons = await _productService.GetAllAsyncActive();
+        _searchService.OnChange += HandleSearchChanged;
+    }
+
+    private async void HandleSearchChanged()
+    {
+        ListaPokemons = await _searchService.FilterNavbar();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose() =>
+        _searchService.OnChange -= HandleSearchChanged;
+
+    private async Task CargarFiltro(int categoria = 0)
+    {
+        if (categoria > 0)
+            ListaPokemons = await _productService.FilterByCatActive(categoria);
+        else
+            ListaPokemons = await _productService.GetAllAsyncActive();
+    }
+}

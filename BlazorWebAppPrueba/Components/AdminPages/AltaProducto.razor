@@ -1,0 +1,162 @@
+﻿@page "/altaProducto"
+@page "/altaProducto/{Id:int}"
+@rendermode InteractiveServer
+@inject NavigationManager NavManager;
+@inject ProductService productService;
+@inject CategoriaService categoriaService;
+<PageTitle>Alta Producto</PageTitle>
+
+@if(_cargando)
+{
+    <p>Cargando..</p>
+}
+else
+{
+    @if (_mostrarMensaje)
+    {
+        <div class="modal fade show" id="mensajeModal" tabindex="-1" role="dialog" style="display:block; background-color: rgba(0,0,0,0.5);">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Mensaje</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p>@_mensaje</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" onclick="history.back()" class="btn btn-primary">Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <div class="row">
+            <div class="col-md-6 col-12">
+                <h2 class ="mb-2"> Pagina producto</h2>
+            
+                <div class="mb-3">
+                    <label class="form-label">Id</label>
+                    <input value="@_producto.Id" readonly type="text" class="form-control"/>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Número</label>
+                    <input @bind-value="_producto.Numero" class="form-control" type="number"/>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Nombre</label>
+                    <input @bind-value="_producto.Nombre" class="form-control" type="text" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Descripcion</label>
+                    <input @bind-value="_producto.Descripcion" class="form-control" type="text" />        
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Categoria</label>
+                    <select @bind="_producto.IdTipo" class="form-select">
+                        @foreach (var elemento in _elementos)
+                        {
+                              <option value="@elemento.Id">@elemento.Descripcion</option>              
+                        }
+
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Categoria</label>
+                    <select @bind="_producto.IdDebilidad" class="form-select">
+                        @foreach (var elemento in _elementos)
+                        {
+                            <option value="@elemento.Id">@elemento.Descripcion</option>
+                        }
+
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Precio</label>
+                    <input @bind-value="_producto.Precio" class="form-control" type="number" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Cantidad</label>
+                    <input @bind-value="_producto.Cantidad" class="form-control" type="number" />
+                </div>
+                <div class ="mb-3">
+                    <input @bind-value="_producto.Activo" type="checkbox" checked="@_producto.Activo" class="form-check-input"/> <label class="form-label ms-2">Activo</label>
+                </div>
+            </div>    
+
+            <div class="col-md-6 col-12">
+                <div class="mb-3">
+                    <label class="form-label">Url imagen</label>
+                    <input @bind-value="_producto.UrlImagen" Class="form-control"/>
+                </div>
+                 <img src="@_producto.UrlImagen" class="img-fluid mx-auto d-block mb-3" />
+            </div>
+       </div>
+
+    <div class="row">
+        <div class="col-md-6 col-12">
+            <div class="mb-3">
+                <button @onclick="Aceptar" class="btn btn-primary">Aceptar</button>
+                <a href="/listaProductos" class="btn btn-primary">Cancelar</a>
+            </div>
+            <button @onclick="() =>_eliminar = !_eliminar" class="btn btn-danger mb-3">Eliminar</button>
+
+            @if(_eliminar)
+            {
+                <div class="d-flex">
+                    <label class="text-nowrap form-label me-2" >¿Eliminar permanentemente?</label>
+                    <input @bind-value="_eliminarConfirm" type="checkbox" class="form-check-input" />
+                </div>
+                    <button @onclick="Eliminar" class="btn btn-outline-danger">Eliminar</button>
+            }
+        </div>
+    </div>
+
+   
+}
+
+@code {
+
+    [Parameter]
+    public int Id { get; set; }
+
+    private IEnumerable<Elemento> _elementos;
+
+    private Pokemon _producto = new();
+
+    private bool _cargando = true;
+
+    private string _mensaje = "";
+
+    private bool _mostrarMensaje = false;
+
+    private bool _eliminar = false;
+
+    private bool _eliminarConfirm = false;
+
+    protected async override Task OnInitializedAsync()
+    {
+        _elementos = await categoriaService.CargarElementos();
+
+        if (Id > 0)
+            _producto = await productService.GetById(Id);
+
+        _cargando = false;
+    }
+
+    private async Task Aceptar()
+    {
+        var (success, message) = await productService.GuardarAsync(_producto);
+
+        _mensaje = message;
+        _mostrarMensaje = true;
+    }
+
+    private async Task Eliminar()
+    {
+        if (_eliminarConfirm)
+        {
+            await productService.EliminarAsync(_producto);
+            NavManager.NavigateTo("/listaProductos");
+        }
+    }
+}
