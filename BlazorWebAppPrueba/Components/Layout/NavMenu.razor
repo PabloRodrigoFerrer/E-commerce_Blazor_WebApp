@@ -1,8 +1,9 @@
 ﻿@using BlazorWebAppPrueba.Helpers
 @rendermode InteractiveServer
 @inject SearchService searchService
+@inject UserService userService
 
-<nav class="navbar navbar-expand-lg bg-dark navbar-dark align-items-center">
+<nav class="navbar navbar-expand-lg bg-dark navbar-dark align-items-center" data-bs-theme="light">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Navbar</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,9 +26,9 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><a class="dropdown-item" href="/listaPedidos">Pedidos</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        <li><button class="dropdown-item" @onclick="userService.Logout">Logout</button></li>
                     </ul>
                 </li>
                 <li class="nav-item">

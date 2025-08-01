@@ -86,13 +86,13 @@
                     </div>
                 </TemplateColumn>
                 <TemplateColumn>
-                    <button @onclick="() => NavToAltaProducto(context.Id)" class="btn btn-outline-secondary btn-sm" href="/AltaProducto">Editar</button>
+                    <button @onclick="() => NavToAltaProducto(context.Id)" class="btn btn-link " href="/AltaProducto">Editar</button>
                 </TemplateColumn>
     </QuickGrid>
     <div class="card-footer">
         <Paginator State="_paginationState"/>
     </div>
 
-    <a href="/altaProducto" class="btn btn-primary">Agregar producto</a>
+    <a href="/altaProducto" class="btn btn-outline-success">Agregar producto</a>
     
 

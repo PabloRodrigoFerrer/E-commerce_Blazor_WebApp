@@ -1,0 +1,48 @@
+﻿@page "/listaPedidos"
+@rendermode InteractiveServer
+@inject PedidoService _pedidoService
+
+
+<h1>Pedidos</h1>
+<h3>Detalle</h3>
+<hr />
+@if (!_cargando)
+{
+    <QuickGrid class="table table-striped"
+               Items="_listaPedidos.AsQueryable()"
+               ItemKey="@(p => p.IdPedido)">
+
+        <PropertyColumn Title="Id Cliente"
+                        Property="@(p => p.IdCliente)" />
+        <PropertyColumn Title="Fecha pedido"
+                        Property="@(p => p.FechaPedido)" />
+
+        <PropertyColumn Title="Cliente"
+                        Property="@(p => p.Cliente)" />
+        <PropertyColumn Title="Total Unidades"
+                        Property="@(p => p.TotalUnidades)" />
+        <PropertyColumn Title="Total Pedido"
+                        Property="@(p => p.TotalPedido)" />
+        <PropertyColumn Title="Dirección Entrega"
+                        Property="@(p => p.DireccionEntrega)" />
+        <TemplateColumn>
+            <a class="btn btn-link" href="/detallePedidos/@context.IdPedido">Ver detalle</a>
+        </TemplateColumn>
+
+    </QuickGrid>
+}
+else
+{
+    <p>Cargando...</p>
+}
+
+
+@code {
+    private IEnumerable<Pedido> _listaPedidos;
+    private bool _cargando = true;
+    protected async override Task OnInitializedAsync()
+    {
+        _listaPedidos = await _pedidoService.GetAllAsync();
+        _cargando = false;
+    }
+}

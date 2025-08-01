@@ -1,0 +1,49 @@
+﻿@page "/detallePedidos/{Id:int}"
+@inject PedidoDetalleService pedidoDetalleService
+
+<h3>DetallePedidos</h3>
+
+@if (!_cargando)
+{
+    <QuickGrid Class="table table-striped"
+               Items="_listaDetallePedidos.AsQueryable()"
+               ItemKey="@(p => p.IdDetalle)">
+        <PropertyColumn Title="IdDetalle"
+                        Property="@(p => p.IdDetalle)" />
+        <PropertyColumn Title="IdPedido"
+                        Property="@(p => p.IdPedido)" />
+        <PropertyColumn Title="IdProducto"
+                        Property="@(p => p.IdProducto)" />
+        <PropertyColumn Title="Cantidad"
+                        Property="@(p => p.Cantidad)" />
+
+        <PropertyColumn Title="PrecioUnitario"
+                        Property="@(p => p.PrecioUnitario)" />
+        <PropertyColumn Title="SubTotal"
+                        Property="@(p => p.SubTotal)" />
+        <PropertyColumn Title="Producto"
+                        Property="@(p => p.NombreProducto)" />
+
+    </QuickGrid>
+}
+else
+{
+    <p>Cargando...</p>
+}
+
+
+
+
+@code {
+
+    [Parameter]
+    public int Id { get; set; }
+    private IEnumerable<PedidoDetalle> _listaDetallePedidos;
+    private bool _cargando = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _listaDetallePedidos = await pedidoDetalleService.GetDetallesById(Id);
+        _cargando = false;
+    }
+}

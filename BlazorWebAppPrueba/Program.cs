@@ -21,9 +21,15 @@ builder.Services.AddDbContext<AppContextDb>(options =>
 builder.Services.AddScoped<IMapper<Pokemon, CarritoItem>, MapToCarritoItem>();
 builder.Services.AddScoped<IRepositoryPokemon<Pokemon>, PokemonRepository>();
 builder.Services.AddScoped<IRepositoryElemento<Elemento>, ElementoRepository>();
+builder.Services.AddScoped<IRepositoryPedido<Pedido>, PedidoRepository>();
+builder.Services.AddScoped<IRepositoryPedidoDetalle<PedidoDetalle>, PedidoDetalleRepository>();
+builder.Services.AddScoped<IRepositoryUser<User>, UsuarioRepository>();
 builder.Services.AddScoped<CarritoService>();
 builder.Services.AddScoped<CategoriaService>();
 builder.Services.AddScoped<ProductService>();
+builder.Services.AddScoped<PedidoService>();
+builder.Services.AddScoped<PedidoDetalleService>();
+builder.Services.AddScoped<UserService>();
 
 builder.Services.AddScoped<SearchService>();
 

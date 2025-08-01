@@ -22,14 +22,13 @@
         @foreach (var poke in ListaPokemons)
         {
             <div class="col">
-                <div class="card">
+                <div class="card border-secondary">
                     <img src="@poke.UrlImagen" class="card-img-top" alt="...">
                     <div class="card-body">
                         <h5 class="card-title">@poke.Nombre</h5>
                         <h3 class="card-title">@poke.Precio.ToString("C")</h3>
                         <p class="card-text">@poke.Descripcion</p>
                         <a href="/detallePokemon/@poke.Id" class="btn btn-link">Ver detalle</a>
-                        @* <NavLink href="./detallePokemon/@poke.Id" class="btn btn-link" >Ver Detalle</NavLink> *@
                         <button @onclick="() => Cart.AgregarCarrito(poke)" class="btn btn-primary">Agregar a Carrito 🛒</button>
                     </div>
                 </div>
