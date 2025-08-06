@@ -9,6 +9,11 @@ namespace Entity
 {
     public class Remito
     {
+        public Remito() 
+        {
+            Detalles = new List<RemitoDetalle>();
+        }
+
         [Key]
         public int IdRemito { get; set; }
 
@@ -16,8 +21,11 @@ namespace Entity
 
         public int IdCliente { get; set; }
 
-        public int IdPedido {  get; set; }
+        public int IdPedido { get; set; }
 
-        public Decimal TotalPedido { get; set; }
+        public Decimal TotalRemito { get; set; }
+
+        public List<RemitoDetalle> Detalles { get; set;}
+        
     }
 }

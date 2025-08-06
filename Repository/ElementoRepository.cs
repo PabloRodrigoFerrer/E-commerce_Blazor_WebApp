@@ -28,5 +28,10 @@ namespace Repository
                     Descripcion= e.Descripcion,
                 }).ToListAsync();
         }
+
+        public async Task<Elemento> GetElementById(int idTipo)
+        {
+            return await _context.Elementos.Where(e => e.Id == idTipo).FirstOrDefaultAsync();
+        }
     }
 }

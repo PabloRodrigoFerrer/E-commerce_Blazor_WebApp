@@ -38,6 +38,12 @@ namespace Repository.Context
                 .WithOne()
                 .HasForeignKey(d => d.IdPedido)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Remito>()
+                .HasMany(r => r.Detalles)
+                .WithOne()
+                .HasForeignKey(r => r.RemitoId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

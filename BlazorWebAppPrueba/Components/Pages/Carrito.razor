@@ -2,14 +2,31 @@
 @using Application
 @rendermode InteractiveServer
 @inject CarritoService Cart
-
-@{
-   
-    string label = Cart.Items.Sum(c => c.Subtotal).ToString("C");
-
-}
+@inject PedidoService _pedidoService
 
 <PageTitle>Carrito</PageTitle>
+@{
+    string label = Cart.Items.Sum(c => c.Subtotal).ToString("C");
+}
+
+@if (_mostrarMensaje)
+{
+    <div class="modal fade show" id="mensajeModal" tabindex="-1" role="dialog" style="display:block; background-color: rgba(0,0,0,0.5);">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Mensaje</h5>
+                </div>
+                <div class="modal-body">
+                    <p>@_mensaje</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="history.back()" class="btn btn-primary">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 
 <div class="row mt-4">
     <div class="col-md-6 col-12">
@@ -27,6 +44,7 @@
         <tr>
             <th>Id</th>
             <th>Nombre</th>
+            <th>Color</th>
             <th>Cantidad</th>
             <th>Precio Unitario</th>
             <th>SubTotal</th>
@@ -38,6 +56,7 @@
             <tr>
                 <td>@item.PokeId</td>
                 <td>@item.PokeName</td>
+                <td>@item.PokeTipo</td>
                 <td>
                     <select @onchange="(e) => RefreshQuantity(item, e.Value?.ToString())" class="form-select">
                         @for (int i = 1; i <= item.CantidadMax; i++)
@@ -59,8 +78,27 @@
 <div class="row align-items-center">
     <div class="text-md-end">
         <a class="me-3" href="./Default">Ir a productos</a>
-        <button class="btn btn-success">Enviar pedido</button>
+        <button @onclick="EnviarPedido" class="btn btn-success">Enviar pedido</button>
     </div>
 </div>
 
 <p>Cart items count: @Cart.Items.Count()</p>
+
+
+@code
+{
+    private bool _mostrarMensaje = false;
+
+    private string _mensaje = "Pedido envidado correctamente✅";
+
+
+    private void RefreshQuantity(CarritoItem item, string cantidad) => item.Cantidad = int.Parse(cantidad);
+
+    private async Task EnviarPedido()
+    {
+        await _pedidoService.InsertAsync(Cart.Items);
+        _mostrarMensaje = true;
+        Cart.LimpiarCarrito();
+    }
+    
+}

@@ -14,7 +14,7 @@ namespace Entity
 
         public int RemitoId { get; set; }
 
-        public int ProdutoId { get; set; }
+        public int ProductoId { get; set; }
 
         public int Cantidad { get; set; }
 
@@ -24,6 +24,6 @@ namespace Entity
 
         public decimal PrecioUnitario { get; set; }
 
-        public decimal SubTotal => Cantidad * PrecioUnitario;
+        public decimal SubTotal { get; set; }
     }
 }

@@ -18,7 +18,7 @@ namespace Entity
 
         public string PokeName { get; set; }
 
-        //public Elemento PokeTipo { get; set; }
+        public Elemento PokeTipo { get; set; }
 
         public int CantidadMax { get; set; }
 

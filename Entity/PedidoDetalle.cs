@@ -20,7 +20,7 @@ namespace Entity
         
         public decimal PrecioUnitario {  get; set; }
 
-        public decimal SubTotal => Cantidad * PrecioUnitario;
+        public decimal SubTotal { get; set; }
 
         public string NombreProducto { get; set; }
 

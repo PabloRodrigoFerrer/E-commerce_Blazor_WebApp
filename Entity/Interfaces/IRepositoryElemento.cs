@@ -9,5 +9,7 @@ namespace Entity.Interfaces
     public interface IRepositoryElemento<T>
     {
         Task<IEnumerable<T>> GetAllAsync();
+
+        Task<T> GetElementById(int idTipo);
     }
 }

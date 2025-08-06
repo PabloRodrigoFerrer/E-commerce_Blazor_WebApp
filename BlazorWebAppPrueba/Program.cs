@@ -1,4 +1,5 @@
 using Application;
+using Application.Mappers;
 using BlazorWebAppPrueba.Components;
 using BlazorWebAppPrueba.Helpers;
 using Entity;
@@ -19,19 +20,23 @@ builder.Services.AddDbContext<AppContextDb>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DbPokedex")));
 
 builder.Services.AddScoped<IMapper<Pokemon, CarritoItem>, MapToCarritoItem>();
+builder.Services.AddScoped<IMapper<PedidoDetalle, RemitoDetalle>, MapPedidoDetalleToRemitoDetalle>();
 builder.Services.AddScoped<IRepositoryPokemon<Pokemon>, PokemonRepository>();
 builder.Services.AddScoped<IRepositoryElemento<Elemento>, ElementoRepository>();
 builder.Services.AddScoped<IRepositoryPedido<Pedido>, PedidoRepository>();
 builder.Services.AddScoped<IRepositoryPedidoDetalle<PedidoDetalle>, PedidoDetalleRepository>();
+builder.Services.AddScoped<IRepositoryRemito<Remito>, RemitoRepository>();
 builder.Services.AddScoped<IRepositoryUser<User>, UsuarioRepository>();
+builder.Services.AddScoped<Elemento>();
 builder.Services.AddScoped<CarritoService>();
 builder.Services.AddScoped<CategoriaService>();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<PedidoService>();
 builder.Services.AddScoped<PedidoDetalleService>();
+builder.Services.AddScoped<RemitoService>();
 builder.Services.AddScoped<UserService>();
-
 builder.Services.AddScoped<SearchService>();
+
 
 var app = builder.Build();
 

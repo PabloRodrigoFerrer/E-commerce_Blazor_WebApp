@@ -26,10 +26,13 @@ namespace Entity
 
         public DateTime? FechaNacimiento { get; set; }
 
+        [Required(ErrorMessage = "El email es obligatorio")]
+        [RegularExpression(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", ErrorMessage = "El email debe tener un dominio válido")]
         public string? Email { get; set; }
 
         public string? Usuario { get; set; }
 
+        [Required(ErrorMessage = "Ingresar una contraseña es obligatorio")]
         public string Pass { get; set; }
 
         public string? urlImagen { get; set; }

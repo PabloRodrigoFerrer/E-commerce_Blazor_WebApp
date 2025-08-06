@@ -1,0 +1,124 @@
+﻿@page "/generarRemito/{idPedido:int}/{idCliente:int}"
+
+@rendermode InteractiveServer
+@inject PedidoDetalleService _pedidoDetalleService
+@inject RemitoService _remitoService
+
+<PageTitle>Carrito</PageTitle>
+
+@if (!_cargando)
+{
+    @if (_mostrarMensaje)
+    {
+        <div class="modal fade show" id="mensajeModal" tabindex="-1" role="dialog" style="display:block; background-color: rgba(0,0,0,0.5);">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Mensaje</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p>@_mensaje</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" onclick="history.back()" class="btn btn-primary">Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="row mt-4">
+        <div class="col-md-6 col-12">
+            <h3 class="mb-3">Mi Carrito</h3>
+        </div>
+        <div class="col-md-6 col-12 text-md-end">
+            <h5>Total compra</h5>
+            <label class="form-label" Style="font-size: 1.5em; font-weight: bold; color: black;">@label</label>
+        </div>
+    </div>
+    <hr />
+
+    <table id="miTabla" class="table table-striped mb-3">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Color</th>
+                <th>Cantidad</th>
+                <th>Precio Unitario</th>
+                <th>SubTotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in _listaPedidoDetalle)
+            {
+                <tr>
+                    <td>@item.IdDetalle</td>
+                    <td>@item.NombreProducto</td>
+                    <td>@item.Color</td>
+                    <td>
+                        <input value="@item.Cantidad" @onchange="(e) => RefreshQuantity(item, e.Value?.ToString())" class="form-control">
+
+                        </input>
+                    </td>
+                    <td>@item.PrecioUnitario.ToString("C")</td>
+                    <td>@(item.SubTotal = item.PrecioUnitario * item.Cantidad) </td>
+                    <td>
+                        <button @onclick="() => _listaPedidoDetalle.Remove(item)" class="btn btn-link">Quitar</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="row align-items-center">
+        <div class="text-md-end">
+            <a class="me-3" href="./Default">Ir a productos</a>
+            <button @onclick="EnviarRemito" class="btn btn-success">Generar remito</button>
+        </div>
+    </div>
+
+    <p>Cart items count: @_listaPedidoDetalle.Count()</p>
+}
+
+
+@code
+{
+    [Parameter]
+    public int idPedido { get; set; }
+    [Parameter]
+    public int idCliente { get; set; }
+
+    private List<PedidoDetalle> _listaPedidoDetalle;
+    private bool _mostrarMensaje = false;
+    private string _mensaje = "Remito generado correctamente✅";
+    private string label = "";
+    private bool _cargando { get; set; } = true;
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        _listaPedidoDetalle = (List<PedidoDetalle>)await _pedidoDetalleService.GetDetallesById(idPedido);
+        RefreshLabel();
+        _cargando = false;
+    }
+
+
+    private async Task EnviarRemito()
+    {
+        await _remitoService.InsertRemito(_listaPedidoDetalle, idCliente, idPedido);
+    }
+
+    private void RefreshQuantity(PedidoDetalle item, string cantidad)
+    {
+        item.Cantidad = int.Parse(cantidad);
+        RefreshLabel();
+    }
+
+    private void RefreshLabel()
+    {
+        label = _listaPedidoDetalle.Sum(c => c.PrecioUnitario * c.Cantidad).ToString("C");
+    }
+
+
+}

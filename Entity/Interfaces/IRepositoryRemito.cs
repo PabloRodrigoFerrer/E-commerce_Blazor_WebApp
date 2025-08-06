@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Entity.Interfaces
 {
-    public interface IMapper<TIn,TOut>
+    public interface IRepositoryRemito<T>
     {
-        public Task<TOut> Map(TIn input);
+        Task<IEnumerable<T>> GetAllAsync();
+
+        Task AddAsync(T nuevoRemito);
     }
 }

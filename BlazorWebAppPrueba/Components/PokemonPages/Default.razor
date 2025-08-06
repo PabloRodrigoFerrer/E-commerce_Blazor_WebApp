@@ -29,7 +29,20 @@
                         <h3 class="card-title">@poke.Precio.ToString("C")</h3>
                         <p class="card-text">@poke.Descripcion</p>
                         <a href="/detallePokemon/@poke.Id" class="btn btn-link">Ver detalle</a>
-                        <button @onclick="() => Cart.AgregarCarrito(poke)" class="btn btn-primary">Agregar a Carrito 🛒</button>
+                        <button @onclick="() => Cart.AgregarCarrito(poke)" class="btn btn-primary position-relative">
+                            Agregar a Carrito 🛒
+                            @if (Cart.IsInCart(poke.Id))
+                            {
+                                <span class="position-absolute position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    @Cart.Items.FirstOrDefault(c => c.PokeId == poke.Id)?.Cantidad
+                                    <span class="visually-hidden">cantidad en carrito</span>
+                                </span>
+                            }
+                        </button>
+                        @if (Cart.IsInCart(poke.Id))
+                        {
+                            <span class='badge bg-success ms-4'>En carrito</span>
+                        }
                     </div>
                 </div>
             </div>
@@ -42,7 +55,7 @@
     <p>no hay lista</p>
 }
 
-     
+
 @code {
     public IEnumerable<Pokemon> ListaPokemons { get; set; }
 

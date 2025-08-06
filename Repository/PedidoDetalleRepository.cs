@@ -27,6 +27,7 @@ namespace Repository
                 IdPedido = p.IdPedido,
                 IdProducto = p.IdProducto,
                 Cantidad = p.Cantidad,
+                SubTotal = p.SubTotal,
                 PrecioUnitario = p.PrecioUnitario,
                 NombreProducto = p.NombreProducto,
                 Color = p.Color
@@ -42,6 +43,7 @@ namespace Repository
                      IdDetalle = d.IdDetalle,
                      IdPedido = d.IdPedido,
                      IdProducto = d.IdProducto,
+                     SubTotal = d.SubTotal,
                      Cantidad = d.Cantidad,
                      PrecioUnitario = d.PrecioUnitario,
                      NombreProducto = d.NombreProducto,

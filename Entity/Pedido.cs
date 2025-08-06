@@ -9,6 +9,11 @@ namespace Entity
 {
     public class Pedido
     {
+        public Pedido()
+        {
+            Detalles = new List<PedidoDetalle>();
+        }
+
         [Key]
         public int IdPedido { get; set; }
 
@@ -16,10 +21,9 @@ namespace Entity
 
         public int IdCliente { get; set; }
 
-        public string Estado { get; set; }
+        public string? Estado { get; set; }
 
-        public decimal? TotalPedido { get; set; }
-
+        public decimal TotalPedido { get; set; }
         public int TotalUnidades { get; set; }
         public string? Cliente { get; set; }
         public string? DireccionEntrega { get; set; }

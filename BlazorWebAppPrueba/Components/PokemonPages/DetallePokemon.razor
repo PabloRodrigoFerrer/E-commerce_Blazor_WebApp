@@ -1,20 +1,21 @@
 ﻿@page "/detallePokemon/{id:int}"
 @rendermode InteractiveServer
 @inject ProductService _productService
+@inject CarritoService Cart
 <h1>Detalle</h1>
 
 
 <h2>Articulo</h2>
 <hr />
 
- @if (_cargando) 
- {
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Cargando...</span>
-            </div>  
- }  
- else
- {   
+@if (_cargando)
+{
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+    </div>
+}
+else
+{
     <div class="d-flex flex-column flex-lg-row gap-xl">
         <div class="carousel-fixed">
             <div id="carouselExampleIndicators" class="carousel carousel-fade  ">
@@ -60,24 +61,31 @@
             <div class="d-flex align-items-center">
                 <div class="position-relative d-incline-block">
                     <a href="/Default" class="btn btn-link">Ir a productos</a>
-                    <button class="btn btn-primary my-2 ms-3">Agregar a carrito🛒</button>
-                    <span class='position-absolute badge rounded-pill bg-danger' style="top: 0.0rem; right: 0rem; transform: translate(50%, 0%);">
-                        @Seleccionado.Cantidad.ToString()
-                        <span class='visually-hidden'>cantidad en carrito</span>
-                    </span>
+                    <button class="btn btn-primary my-2 ms-3 position-relative">
+                        Agregar a carrito🛒
+                        @if (Cart.IsInCart(id))
+                        {
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                @Cart.Items.FirstOrDefault(c => c.PokeId == id)?.Cantidad
+                            </span>
+                        }
+                    </button>
                 </div>
             </div>
-            <span class='badge bg-success'>En carrito</span>
+            @if (Cart.IsInCart(id))
+            {
+                <span class="badge bg-success ms-4">En carrito</span>
+            }
         </div>
 
     </div>
- }
+}
 
 
-@code{
+@code {
 
     [Parameter]
-    public int id{ get; set; }
+    public int id { get; set; }
     public Pokemon Seleccionado { get; set; }
     public bool _cargando = true;
 

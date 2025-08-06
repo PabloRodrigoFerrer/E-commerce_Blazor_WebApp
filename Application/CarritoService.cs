@@ -19,9 +19,9 @@ namespace Application
         }
 
 
-        public void AgregarCarrito(Pokemon poke)
+        public async Task AgregarCarrito(Pokemon poke)
         {
-            var item = _mapToCarritoItem.Map(poke);
+            var item = await _mapToCarritoItem.Map(poke);
             var existente =_items.FirstOrDefault(c => c.PokeId == item.PokeId);
 
             if (existente != null && existente.Cantidad < existente.CantidadMax)
@@ -35,5 +35,14 @@ namespace Application
 
         public void LimpiarCarrito() => _items.Clear();      
 
+        public bool IsInCart(int id) 
+        {
+            var item = _items.FirstOrDefault(i => i.PokeId == id);
+
+            if (item != null)
+                return true;
+
+            return false;
+        }
     }
 }

@@ -25,9 +25,11 @@
                         Property="@(p => p.TotalPedido)" />
         <PropertyColumn Title="Dirección Entrega"
                         Property="@(p => p.DireccionEntrega)" />
-        <TemplateColumn>
+        <TemplateColumn Class="d-flex">
             <a class="btn btn-link" href="/detallePedidos/@context.IdPedido">Ver detalle</a>
+            <a class="btn btn-link" href ="/generarRemito/@context.IdPedido/@context.IdCliente">Generar remito</a>
         </TemplateColumn>
+        
 
     </QuickGrid>
 }
@@ -39,6 +41,7 @@ else
 
 @code {
     private IEnumerable<Pedido> _listaPedidos;
+ 
     private bool _cargando = true;
     protected async override Task OnInitializedAsync()
     {

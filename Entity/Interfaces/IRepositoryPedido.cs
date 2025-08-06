@@ -11,6 +11,6 @@ namespace Entity.Interfaces
         Task<IEnumerable<T>> GetAllAsync();
 
 
-        Task<IEnumerable<T>> AddAsync();
+        Task AddAsync(Pedido nuevoPedido);
     }
 }

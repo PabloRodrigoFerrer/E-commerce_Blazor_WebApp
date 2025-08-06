@@ -4,24 +4,26 @@
 @rendermode InteractiveServer
 <PageTitle>Productos</PageTitle>
 
-<EditForm Model="_usuario" OnSubmit="Registrar">
+<EditForm Model="_usuario" OnValidSubmit="Registrar">
+    <DataAnnotationsValidator/>
     <div class="row justify-content-center">
         <div class="col-md-5 col-12 mt-4">
             <h3 class="mb-2 text-center">Registro usuario</h3>
             <div class="mb-3">
                 <label class="form-label">Usuario</label>
-                <input @bind="Email" type="email" class="form-control" placeholder="User o email" required />
+                <input @bind-value="_usuario.Email" type="email" class="form-control" placeholder="User o email"/>
+                <ValidationMessage For="() => _usuario.Email" class="text-danger"/>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Contraseña</label>
-                <input @bind="Pass" class="form-control" placeholder="******" />
+                <input @bind-value="_usuario.Pass" class="form-control" placeholder="******" />
+                <ValidationMessage For="() => _usuario.Pass" class="text-danger" />
             </div>
             @if (!_log)
             {
                 <p class="my-2" style="color:red">Ya existe un usuario con este email</p>
             }
-
             <div class="d-flex align-items-center mb-3 gap-3 ">
                 <button type="submit" class="btn btn-primary">Registrarse</button>
                 <a href="/Default">Regresar</a>
@@ -36,10 +38,6 @@
 
     private User _usuario { get; set; } = new();
 
-    private string Email { get; set; }
-
-    private string Pass { get; set; }
-
     protected async override Task OnInitializedAsync()
     {
         _log = true;
@@ -47,13 +45,11 @@
 
     public async Task Registrar()
     {
-        var newUser = await _userService.RegistrarUserAsyc(Email, Pass);
+        var newUser = await _userService.RegistrarUserAsyc(_usuario.Email, _usuario.Pass);
 
         if (newUser != null)            
             NavManager.NavigateTo("/default");
         else
             _log = false;
     }
-
-
 }
